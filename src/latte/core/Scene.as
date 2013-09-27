@@ -28,7 +28,7 @@ package latte.core
 		 */
 		public function update(delta:Number):void
 		{
-			trace(delta);
+			
 		}
 		
 		public function get active():Boolean
@@ -39,10 +39,7 @@ package latte.core
 		public function set active(value:Boolean):void
 		{
 			_active = value;
-			
-			if(_active) {
-				this.visible = false;
-			}
+			this.visible = value;
 		}
 	}
 }

@@ -4,6 +4,12 @@ helpful features for game development, thus easing the development.
 
 It's focused on beeing easy to learn and with easy to understand documentation.
 
+# Features
+On top of Starling, it features:
+
+ * Scene management
+ * Read tilemaps from [Tiled editor](http://www.mapeditor.org/)
+
 # Initialization
 
 To create a new Latte game just extend the Game class and override the ```init``` method.
