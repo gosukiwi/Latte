@@ -2,19 +2,25 @@ package latte.core
 {
 	import flash.display.BitmapData;
 	import flash.geom.Point;
+	import flash.geom.Rectangle;
+	
+	import starling.display.DisplayObject;
 	import starling.display.Image;
 	import starling.textures.Texture;
-	import flash.geom.Rectangle;
 	
 	/**
 	 * Loads a tilemap from Tiled <http://www.mapeditor.org/>
 	 * The first layer will be the one which is used to draw the map.
 	 * The second layer if exists represent solid tiles.
 	 */
-	public class TileMap extends Image
+	public class Tilemap extends Image
 	{
-		public function TileMap(map:String, tiles:BitmapData)
+		private var _solids:Vector.<Rectangle>;
+		
+		public function Tilemap(map:String, tiles:BitmapData)
 		{
+			_solids = new Vector.<Rectangle>();
+			
 			// Use the JSON class and parse our map into an object
 			var data:Object = JSON.parse(map);
 			
@@ -28,9 +34,13 @@ package latte.core
 			/* Now, let's use the first layer to generate the map, initialize
 			some variables used in the loop */
 			var layer:Array = data.layers[0].data;
+			var collision_layer:Array = null;
+			if(data.layers.length > 1) {
+				collision_layer = data.layers[1].data;
+			}
 			var idx:int = 0;
 			var spacing:int = data.tilesets[0].spacing;
-			var canvas:BitmapData = new BitmapData(width, height);
+			var canvas:BitmapData = new BitmapData(width, height, false, 0x000000);
 			var map_spaced_width:int = int(tiles.width / (data.tilewidth + spacing));
 			
 			for(var j:int = 0, map_height:int = data.height; j < map_height; j += 1) {
@@ -39,7 +49,7 @@ package latte.core
 					also force the tilenum to start from 0 for easier math */
 					var tile_num:int = layer[idx] - 1;
 					
-					// If it's invisible
+					// If it's invisible just skip
 					if(tile_num < 0) {
 						continue;
 					}
@@ -51,16 +61,18 @@ package latte.core
 					// By doing (tile_num / map_width_in_tiles) we get the Y coordinate
 					var start_y:int = int(tile_num / map_spaced_width);
 					
-					// We have the rectangle, let's see if it's a collisionable rectangle
-					/*if (collision_layer != null && collision_layer[idx] != 0) {
-						// If the collision layer is defined and it has a block in this index
-						// add this rectable to solids array
-						_solids.push(new Rectangle(dest_point.x, dest_point.y, _map_data.tilewidth, _map_data.tileheight));
-					}*/
-					
-					// Draw the tile to our canvas
+					// Find out locations for tile in canvas
 					var rect:Rectangle = new Rectangle(start_x * (data.tilewidth + spacing), start_y * (data.tileheight + spacing), data.tilewidth, data.tileheight);
 					var dest:Point = new Point(i * data.tilewidth - spacing, j * data.tileheight - spacing);
+					
+					// We have the rectangle, let's see if it's a collisionable rectangle
+					if (collision_layer != null && collision_layer[idx] != 0) {
+						/* If the collision layer is defined and it has a block in this index
+						add this rectable to solids vector */
+						_solids.push(new Rectangle(dest.x, dest.y, data.tilewidth, data.tileheight));
+					}
+					
+					// Draw the tile to our canvas
 					canvas.copyPixels(tiles, rect, dest);
 					
 					/* The index is incremented on every loop because Tiled stores the map data in a single dimension
@@ -72,6 +84,21 @@ package latte.core
 			// Finally create a texture
 			var texture:Texture = Texture.fromBitmapData(canvas);
 			super(texture);
+		}
+		
+		/**
+		 * Whether an object collides with a solid in this map
+		 */
+		public function collides(obj:DisplayObject):Boolean
+		{
+			var rect:Rectangle = new Rectangle(obj.x, obj.y, obj.width, obj.height);
+			for(var solid:Rectangle in _solids) {
+				if(solid.intersects(rect)) {
+					return true;
+				}
+			}
+			
+			return false;
 		}
 	}
 }
