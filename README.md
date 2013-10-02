@@ -8,9 +8,9 @@ It's focused on beeing easy to learn and with easy to understand documentation.
 On top of Starling, it features:
 
  * Scene management, implement logic inside update function
- * Read tile maps from [Tiled editor](http://www.mapeditor.org/)'s JSON format
+ * Read tilemaps from [Tiled editor](http://www.mapeditor.org/)'s JSON format
  * Easily change the game zoom
- * Input class easily lets you use "input polling" your games (don't know what [input polling](https://code.google.com/p/libgdx/wiki/InputPolling) is?)
+ * Input class easily lets you use [input polling](https://code.google.com/p/libgdx/wiki/InputPolling) in your games
 
 # Initialization
 
