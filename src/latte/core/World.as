@@ -5,6 +5,7 @@ package latte.core
 	
 	import starling.display.Sprite;
 	import starling.events.Event;
+	import starling.events.KeyboardEvent;
 
 	/**
 	 * A starling sprite which will be our world, everything
@@ -22,6 +23,19 @@ package latte.core
 		{
 			this.addEventListener(Event.ADDED_TO_STAGE, init);
 			this.addEventListener(Event.ENTER_FRAME, update);
+			Input.init();
+			this.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+			this.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
+		}
+		
+		private function onKeyUp(event:KeyboardEvent):void
+		{
+			Input.onKeyUp(event);
+		}
+		
+		private function onKeyDown(event:KeyboardEvent):void
+		{
+			Input.onKeyDown(event);
 		}
 		
 		/**

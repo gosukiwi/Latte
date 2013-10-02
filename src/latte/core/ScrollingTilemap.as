@@ -1,21 +1,21 @@
 package latte.core
 {
 	import flash.display.BitmapData;
-	import flash.geom.Rectangle;
-	
 	import starling.core.Starling;
 
 	public class ScrollingTilemap extends Tilemap
 	{
-		private var _viewPort:Rectangle;
 		private var _hero:GameObject;
+		private var _stageWidth:Number;
+		private var _stageHeight:Number;
 		
 		public function ScrollingTilemap(map:String, tiles:BitmapData)
 		{
 			super(map, tiles);
 			
-			_viewPort = new Rectangle(0, 0, Starling.current.stage.stageWidth, Starling.current.stage.stageHeight);
 			_hero = null;
+			_stageWidth = Starling.current.stage.stageWidth;
+			_stageHeight = Starling.current.stage.stageHeight;
 		}
 		
 		/**
@@ -26,6 +26,8 @@ package latte.core
 			_hero = hero;
 			_hero.locked = true;
 			_hero.addEventListener(GameEvent.GAME_OBJECT_MOVE, onHeroMove);
+			// Call it once, so the map positions the first time
+			onHeroMove();
 		}		
 		/**
 		 * This is called when the hero this maps follows move
@@ -33,20 +35,10 @@ package latte.core
 		 */
 		private function onHeroMove():void
 		{
-			_viewPort.x = _hero.x;
-			_viewPort.y = _hero.y;
-			Starling.current.viewPort = _viewPort;
-		}
-		
-		public function get viewPort():Rectangle
-		{
-			return _viewPort;
-		}
-
-		public function set viewPort(value:Rectangle):void
-		{
-			_viewPort = value;
-			Starling.current.viewPort = value;
+			/* Our hero is locked in the middle of the screen, therefor, if the hero
+			is at (0, 0) the map should be with it's top left border in (0, 0) */
+			this.x =  (_stageWidth / 2) - _hero.vx;
+			this.y =  (_stageHeight / 2) - _hero.vy;
 		}
 	}
 }
