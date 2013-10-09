@@ -1,23 +1,33 @@
 package latte.core
 {
 	import flash.display.BitmapData;
-	import starling.core.Starling;
+	import flash.geom.Rectangle;
 
 	public class ScrollingTilemap extends Tilemap
 	{
 		private var _hero:GameObject;
-		private var _stageWidth:Number;
-		private var _stageHeight:Number;
+		private var _scene:Scene;
+		private var _solidsEnabled:Boolean;
 		
-		public function ScrollingTilemap(map:String, tiles:BitmapData)
+		public function ScrollingTilemap(map:String, tiles:BitmapData, scene:Scene)
 		{
 			super(map, tiles);
 			
 			_hero = null;
-			_stageWidth = Starling.current.stage.stageWidth;
-			_stageHeight = Starling.current.stage.stageHeight;
+			_scene = scene;
+			_solidsEnabled = true;
 		}
 		
+		public function get solidsEnabled():Boolean
+		{
+			return _solidsEnabled;
+		}
+
+		public function set solidsEnabled(value:Boolean):void
+		{
+			_solidsEnabled = value;
+		}
+
 		/**
 		 * Make this map follow a DisplayObject
 		 */
@@ -35,10 +45,21 @@ package latte.core
 		 */
 		private function onHeroMove():void
 		{
-			/* Our hero is locked in the middle of the screen, therefor, if the hero
-			is at (0, 0) the map should be with it's top left border in (0, 0) */
-			this.x =  (_stageWidth / 2) - _hero.vx;
-			this.y =  (_stageHeight / 2) - _hero.vy;
+			/* The hero moved, it's new locations are in _hero.vx and _hero.vy
+			If the solids are enabled, check if it's a valid move */
+			if(_solidsEnabled) {
+				var rect:Rectangle = new Rectangle(_hero.vx, _hero.vy, _hero.width, _hero.height);
+				for each(var solid:Rectangle in _solids) {
+					if(rect.intersects(solid)) {
+						_hero.rollback();
+						return;
+					}
+				}
+			}
+			
+			/* Adjust "camera" to center hero */
+			this.x =  (Latte.WORLD_WIDTH / 2) - _hero.vx;
+			this.y =  (Latte.WORLD_HEIGHT / 2) - _hero.vy;
 		}
 	}
 }

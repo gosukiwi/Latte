@@ -27,7 +27,7 @@ package latte.core
 			this.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 			this.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
 		}
-		
+
 		private function onKeyUp(event:KeyboardEvent):void
 		{
 			Input.onKeyUp(event);
@@ -47,6 +47,9 @@ package latte.core
 			_scenes = new Dictionary();
 			_active = null;
 			_lastTick = 0;
+			
+			this.scaleX = Latte.GAME_ZOOM;
+			this.scaleY = Latte.GAME_ZOOM;
 			
 			this.removeEventListener(Event.ADDED_TO_STAGE, init);
 		}

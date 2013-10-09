@@ -15,7 +15,7 @@ package latte.core
 	 */
 	public class Tilemap extends Image
 	{
-		private var _solids:Vector.<Rectangle>;
+		protected var _solids:Vector.<Rectangle>;
 		
 		public function Tilemap(map:String, tiles:BitmapData)
 		{

@@ -1,32 +1,36 @@
 package latte.core
 {
-	import starling.core.Starling;
-	import starling.display.Sprite;
+	import starling.display.Image;
+	import starling.textures.Texture;
 
 	/**
-	 * A game object is a special kind of starling.display.Sprite you
-	 * can inherit from, aside from Sprite, this class implements:
+	 * A superclass of starling.display.Image, it includes:
+	 * 
 	 * 	- Object locking in the middle of the screen (used by Tilemap)
 	 * 	- GAME_OBJECT_MOVE event, dispatched then this object's x or y coordinates are updated
 	 * 
 	 * @author Federico Ramírez
 	 */
-	public class GameObject extends Sprite
+	public class GameObject extends Image
 	{
 		private var _locked:Boolean;
 		
-		// Virtual x
+		// Virtual position
 		private var _vx:Number;
-		// Virtual y
 		private var _vy:Number;
+		// Used for rollback method
+		private var _oldvx:Number;
+		private var _oldvy:Number;
 		
-		public function GameObject()
+		public function GameObject(texture:Texture)
 		{
-			super();
+			super(texture);
 			
 			_locked = false;
 			_vx = 0;
 			_vy = 0;
+			_oldvx = 0;
+			_oldvy = 0;
 		}
 
 		public function get vy():Number
@@ -36,6 +40,7 @@ package latte.core
 
 		public function set vy(value:Number):void
 		{
+			_oldvy = _vy;
 			_vy = value;
 			this.dispatchEvent(new GameEvent(GameEvent.GAME_OBJECT_MOVE));
 		}
@@ -47,6 +52,7 @@ package latte.core
 
 		public function set vx(value:Number):void
 		{
+			_oldvx = _vx;
 			_vx = value;
 			this.dispatchEvent(new GameEvent(GameEvent.GAME_OBJECT_MOVE));
 		}
@@ -60,13 +66,17 @@ package latte.core
 		{
 			// If we are locking this object, we must center it with the real coordinates
 			if(value) {
-				/*_vx = this.x;
-				_vy = this.y;*/
-				this.x = (Starling.current.stage.stageWidth / 2) - (this.width / 2);
-				this.y = (Starling.current.stage.stageHeight / 2) - (this.height / 2);
+				this.x = (Latte.WORLD_WIDTH / 2) - (this.width / 2);
+				this.y = (Latte.WORLD_HEIGHT / 2) - (this.height / 2);
 			}
 
 			_locked = value;
+		}
+		
+		public function rollback():void
+		{
+			_vx = _oldvx;
+			_vy = _oldvy;
 		}
 	}
 }

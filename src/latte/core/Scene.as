@@ -13,13 +13,13 @@ package latte.core
 		
 		public function Scene()
 		{
+			_active = false;
+
 			this.addEventListener(Event.ADDED_TO_STAGE, init);
 		}
 
 		public function init():void
 		{
-			_active = false;
-			
 			this.removeEventListener(Event.ADDED_TO_STAGE, init);
 		}
 		
@@ -28,7 +28,6 @@ package latte.core
 		 */
 		public function update(delta:Number):void
 		{
-			
 		}
 		
 		public function get active():Boolean

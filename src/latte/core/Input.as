@@ -109,7 +109,6 @@ package latte.core
 		
 		public static function onKeyDown(event:KeyboardEvent):void
 		{
-			trace(event.keyCode);
 			_keys[event.keyCode] = true;
 		}
 		
