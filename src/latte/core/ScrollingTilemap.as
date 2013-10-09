@@ -58,8 +58,8 @@ package latte.core
 			}
 			
 			/* Adjust "camera" to center hero */
-			this.x =  (Latte.WORLD_WIDTH / 2) - _hero.vx;
-			this.y =  (Latte.WORLD_HEIGHT / 2) - _hero.vy;
+			this.x = (Latte.WORLD_WIDTH / 2) - (_hero.width / 2) - _hero.vx;
+			this.y = (Latte.WORLD_HEIGHT / 2) - (_hero.height / 2) - _hero.vy;
 		}
 	}
 }

@@ -64,7 +64,7 @@ package latte.core
 
 		public function set locked(value:Boolean):void
 		{
-			// If we are locking this object, we must center it with the real coordinates
+			// If locking, center in the middle of the screen
 			if(value) {
 				this.x = (Latte.WORLD_WIDTH / 2) - (this.width / 2);
 				this.y = (Latte.WORLD_HEIGHT / 2) - (this.height / 2);

@@ -92,6 +92,7 @@ package latte.core
 		public function set currentAnimation(value:String):void
 		{
 			_currentAnimation = value;
+			onAnimationAdvanced();
 		}
 
 		public function addAnimation(name:String, filter:String, fps:Number=12, idleFrame:String = null):void
