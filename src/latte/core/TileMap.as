@@ -15,10 +15,12 @@ package latte.core
 	 */
 	public class Tilemap extends Image
 	{
+		// For now, all solids are saved in a list, TODO: Use binary tree
 		protected var _solids:Vector.<Rectangle>;
 		
-		public function Tilemap(map:String, tiles:BitmapData)
+		public function Tilemap(map:String, tiles:BitmapData, debugMode:Boolean = true)
 		{
+			// Initialize the solids vector
 			_solids = new Vector.<Rectangle>();
 			
 			// Use the JSON class and parse our map into an object
@@ -30,6 +32,9 @@ package latte.core
 			As we need to call super() let's first get width and height */
 			var width:int = data.tilewidth * data.width;
 			var height:int = data.tileheight * data.height;
+			
+			// Let's create the solids BitmapData, transparent
+			var solidsBitmap:BitmapData = new BitmapData(width, height, true, 0x00FFFFFF);
 			
 			/* Now, let's use the first layer to generate the map, initialize
 			some variables used in the loop */
@@ -70,6 +75,8 @@ package latte.core
 						/* If the collision layer is defined and it has a block in this index
 						add this rectable to solids vector */
 						_solids.push(new Rectangle(dest.x, dest.y, data.tilewidth, data.tileheight));
+						// Also draw the solid in the solids BitmapData
+						solidsBitmap.copyPixels(new BitmapData(data.tilewidth, data.tileheight, true, 0x33FF0000), new Rectangle(0, 0, data.tilewidth, data.tileheight), new Point(dest.x, dest.y));
 					}
 					
 					// Draw the tile to our canvas
@@ -79,6 +86,11 @@ package latte.core
 					array, we later use modulus and divisions to get the (x, y) positions */
 					idx++;
 				}
+			}
+			
+			// If debug mode, copy the solids bitmapdata on top of our final map
+			if(debugMode) {
+				canvas.copyPixels(solidsBitmap, new Rectangle(0, 0, solidsBitmap.width, solidsBitmap.height), new Point(0, 0));
 			}
 			
 			// Finally create a texture
