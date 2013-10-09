@@ -119,6 +119,20 @@ package latte.core
 			}
 		}
 		
+		/**
+		 * Moves the GameObject to the specified location
+		 */
+		public function moveTo(x:Number, y:Number):void
+		{
+			if(this.locked) {
+				this.vx = x;
+				this.vy = y;
+			} else {
+				this.x = x;
+				this.y = y;
+			}
+		}
+		
 		public function update(delta:Number):void
 		{
 			var pos:Vector2 = _direction.product(_speed * delta);
