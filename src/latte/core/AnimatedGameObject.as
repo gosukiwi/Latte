@@ -119,15 +119,15 @@ package latte.core
 			readjustSize();
 		}
 		
-		public function update(delta:Number):void
+		public override function update(delta:Number):void
 		{
+			super.update(delta);
 			_animations[_currentAnimation].update(delta);
 		}
 	}
 }
 
 import latte.core.GameEvent;
-
 import starling.events.EventDispatcher;
 import starling.textures.Texture;
 
