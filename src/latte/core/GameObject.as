@@ -30,6 +30,9 @@ package latte.core
 		private var _speed:Number;
 		private var _direction:Vector2;
 		
+		// Called when the object moves
+		private var _moveCallback:Function;
+		
 		public function GameObject(texture:Texture)
 		{
 			super(texture);
@@ -42,6 +45,8 @@ package latte.core
 			
 			_speed = 0;
 			_direction = Vector2.zero();
+			
+			_moveCallback = null;
 		}
 
 		public function get direction():Vector2
@@ -94,7 +99,10 @@ package latte.core
 		{
 			_oldvy = _oldvy == -1 ? value : _vy;
 			_vy = value;
-			this.dispatchEvent(new GameEvent(GameEvent.GAME_OBJECT_MOVE));
+			
+			if(_moveCallback != null) {
+				_moveCallback();
+			}
 		}
 
 		public function get vx():Number
@@ -106,7 +114,10 @@ package latte.core
 		{
 			_oldvx = _oldvx == -1 ? value : _vx;
 			_vx = value;
-			this.dispatchEvent(new GameEvent(GameEvent.GAME_OBJECT_MOVE));
+
+			if(_moveCallback != null) {
+				_moveCallback();
+			}
 		}
 
 		public function get locked():Boolean
@@ -125,6 +136,11 @@ package latte.core
 			_locked = value;
 		}
 		
+		public function onMove(callback:Function):void
+		{
+			_moveCallback = callback;
+		}
+		
 		/**
 		 * Moves the GameObject a given ammount
 		 */
@@ -138,8 +154,6 @@ package latte.core
 				this.y += y;
 			}
 		}
-		
-		
 		
 		public function update(delta:Number):void
 		{

@@ -40,7 +40,8 @@ package latte.core
 		{
 			_hero = hero;
 			_hero.locked = true;
-			_hero.addEventListener(GameEvent.GAME_OBJECT_MOVE, onHeroMove);
+			//_hero.addEventListener(GameEvent.GAME_OBJECT_MOVE, onHeroMove);
+			_hero.onMove(onHeroMove);
 			
 			/* actorWidth and actorHeight are used to represent the hero's width
 			and height in case they dont match the game object's definition */
