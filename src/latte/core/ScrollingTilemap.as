@@ -2,7 +2,7 @@ package latte.core
 {
 	import flash.display.BitmapData;
 	import flash.geom.Rectangle;
-
+	
 	public class ScrollingTilemap extends Tilemap
 	{
 		private var _hero:GameObject;
@@ -49,7 +49,8 @@ package latte.core
 			
 			// Call it once, so the map positions the first time
 			onHeroMove();
-		}		
+		}
+		
 		/**
 		 * This is called when the hero this maps follows move
 		 * We have to update the viewport!
@@ -71,6 +72,28 @@ package latte.core
 			/* Adjust "camera" to center hero */
 			this.x = (Latte.WORLD_WIDTH / 2) - (_hero.width / 2) - _hero.vx;
 			this.y = (Latte.WORLD_HEIGHT / 2) - (_hero.height / 2) - _hero.vy;
+		}
+		
+		public function getCurrentTile():int
+		{
+			if(_hero == null) {
+				throw new Error("Cannot call getCurrentTile when nothing is beeing followed!");
+			}
+			
+			return getTileAt(_hero.position.x + _hero.width / 2, _hero.position.y + _hero.height / 2);
+		}
+		
+		public function getCurrentTileProperties():Object
+		{
+			if(_hero == null) {
+				throw new Error("Cannot call getCurrentTileProperties when nothing is beeing followed!");
+			}
+			
+			if(_mapproperties == null) {
+				return null;
+			}
+			
+			return _mapproperties[getCurrentTile()];
 		}
 	}
 }

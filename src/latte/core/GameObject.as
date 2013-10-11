@@ -54,6 +54,26 @@ package latte.core
 			// Direction must always be normalized
 			_direction = value.normalize();
 		}
+		
+		public function get position():Vector2
+		{
+			if(_locked) {
+				return new Vector2(vx, vy);
+			}
+			
+			return new Vector2(x, y);
+		}
+		
+		public function set position(pos:Vector2):void
+		{
+			if(this.locked) {
+				this.vx = pos.x;
+				this.vy = pos.y;
+			} else {
+				this.x = pos.x;
+				this.y = pos.y;
+			}
+		}
 
 		public function get speed():Number
 		{
@@ -119,19 +139,7 @@ package latte.core
 			}
 		}
 		
-		/**
-		 * Moves the GameObject to the specified location
-		 */
-		public function moveTo(x:Number, y:Number):void
-		{
-			if(this.locked) {
-				this.vx = x;
-				this.vy = y;
-			} else {
-				this.x = x;
-				this.y = y;
-			}
-		}
+		
 		
 		public function update(delta:Number):void
 		{

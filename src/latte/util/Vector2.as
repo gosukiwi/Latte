@@ -69,5 +69,10 @@ package latte.util
 		{
 			return new Vector2(x - vector.x, y - vector.y);
 		}
+		
+		public function toString():String
+		{
+			return "Vector2: (" + x + ", " + y + ")";
+		}
 	}
 }

@@ -91,6 +91,10 @@ package latte.core
 
 		public function set currentAnimation(value:String):void
 		{
+			if(_currentAnimation == value) {
+				return;
+			}
+			
 			_currentAnimation = value;
 			onAnimationAdvanced();
 		}
