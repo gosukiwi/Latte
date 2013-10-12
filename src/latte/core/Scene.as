@@ -10,12 +10,24 @@ package latte.core
 	public class Scene extends Sprite
 	{
 		private var _active:Boolean;
+		private var _world:World;
 		
 		public function Scene()
 		{
 			_active = false;
+			_world = null;
 
 			this.addEventListener(Event.ADDED_TO_STAGE, init);
+		}
+
+		public function get world():World
+		{
+			return _world;
+		}
+
+		public function set world(value:World):void
+		{
+			_world = value;
 		}
 
 		public function init():void

@@ -61,6 +61,7 @@ package latte.core
 			/* The hero moved, it's new locations are in _hero.vx and _hero.vy
 			If the solids are enabled, check if it's a valid move */
 			if(_solidsEnabled) {
+				// TODO: Use a binary tree... or something better than a O(n) algorithm
 				var rect:Rectangle = new Rectangle(_hero.vx, _hero.vy, _heroWidth, _heroHeight);
 				for each(var solid:Rectangle in _solids) {
 					if(rect.intersects(solid)) {

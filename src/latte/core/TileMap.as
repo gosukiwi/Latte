@@ -3,9 +3,6 @@ package latte.core
 	import flash.display.BitmapData;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	
-	import latte.util.Vector2;
-	
 	import starling.display.DisplayObject;
 	import starling.display.Image;
 	import starling.textures.Texture;

@@ -70,10 +70,31 @@ package latte.core
 			}
 		}
 		
+		/**
+		 * Reloads a scene in the world with a new instance. The scene must already exist,
+		 * otherwise use addScene.
+		 */
+		public function reloadScene(name:String, scene:Scene):void
+		{
+			if(!_scenes[name]) {
+				throw new Error("Could not reload scene " + name + " because it does not exists in the first place.");
+			}
+			
+			if(name == _active) {
+				this.removeChild(_scenes[_active], true);
+				this.addChild(scene);
+			}
+
+			addScene(name, scene);
+		}
+		
+		/**
+		 * Adds a new scene to this world
+		 */
 		public function addScene(name:String, scene:Scene):void
 		{
+			scene.world = this;
 			_scenes[name] = scene;
-			this.addChild(scene);
 		}
 		
 		public function get active():String
@@ -90,12 +111,15 @@ package latte.core
 			// If there's an old scene, set it as not active 
 			if(_active != null) {
 				_scenes[_active].active = false;
+				this.removeChild(_scenes[_active], true);
 			}
 			
 			// Set the new active name
 			_active = value;
 			// Set the active scene as active
 			_scenes[value].active = true;
+			// Add the current scene to the stage
+			this.addChild(_scenes[_active]);
 		}
 	}
 }

@@ -1,7 +1,6 @@
 package latte.core
 {
 	import latte.util.Vector2;
-	
 	import starling.display.Image;
 	import starling.textures.Texture;
 
@@ -33,6 +32,9 @@ package latte.core
 		// Called when the object moves
 		private var _moveCallback:Function;
 		
+		// This is reused by the getter "position", object creation is expensive in AS3
+		private var _position:Vector2;
+		
 		public function GameObject(texture:Texture)
 		{
 			super(texture);
@@ -47,6 +49,8 @@ package latte.core
 			_direction = Vector2.zero();
 			
 			_moveCallback = null;
+			
+			_position = Vector2.zero();
 		}
 
 		public function get direction():Vector2
@@ -63,10 +67,14 @@ package latte.core
 		public function get position():Vector2
 		{
 			if(_locked) {
-				return new Vector2(vx, vy);
+				_position.x = vx;
+				_position.y = vy;
+			} else {
+				_position.x = x;
+				_position.y = y;
 			}
 			
-			return new Vector2(x, y);
+			return _position;
 		}
 		
 		public function set position(pos:Vector2):void
@@ -136,6 +144,9 @@ package latte.core
 			_locked = value;
 		}
 		
+		/**
+		 * Called when the virtual coordinates moved, used by the tilemap
+		 */
 		public function onMove(callback:Function):void
 		{
 			_moveCallback = callback;
