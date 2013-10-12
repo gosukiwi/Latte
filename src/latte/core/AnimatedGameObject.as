@@ -111,7 +111,7 @@ package latte.core
 			}
 
 			_animations[name] = new Animation(frames, fps, defaultFrame);
-			_animations[name].addEventListener(GameEvent.ANIMATED_GAME_OBJECT_ADVANCED, onAnimationAdvanced);
+			_animations[name].onAdvance(onAnimationAdvanced);
 		}
 		
 		/**
@@ -131,8 +131,6 @@ package latte.core
 	}
 }
 
-import latte.core.GameEvent;
-import starling.events.EventDispatcher;
 import starling.textures.Texture;
 
 /**
@@ -141,7 +139,7 @@ import starling.textures.Texture;
  * It also has a Frames Per Second (FPS) number and a texture which will be used when the animation
  * is in IDLE mode.
  */
-internal class Animation extends EventDispatcher
+internal class Animation
 {
 	private var _elapsed:Number;
 	private var _elapsedLimit:Number;
@@ -149,6 +147,7 @@ internal class Animation extends EventDispatcher
 	private var _currentFrame:int;
 	private var _textures:Vector.<Texture>;
 	private var _idle:Boolean;
+	private var _advanceCallback:Function;
 	
 	public function Animation(textures:Vector.<Texture>, fps:Number, idleFrame:Texture)
 	{
@@ -184,7 +183,12 @@ internal class Animation extends EventDispatcher
 	private function advance():void
 	{
 		_currentFrame = (_currentFrame + 1) % _textures.length;
-		this.dispatchEvent(new GameEvent(GameEvent.ANIMATED_GAME_OBJECT_ADVANCED));
+		_advanceCallback();
+	}
+	
+	public function onAdvance(callback:Function):void
+	{
+		_advanceCallback = callback;
 	}
 	
 	/**
